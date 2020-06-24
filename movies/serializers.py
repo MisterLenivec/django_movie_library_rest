@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Movie
+from .models import Movie, Review
 
 
 class MovieListSerializer(serializers.ModelSerializer):
@@ -9,6 +9,22 @@ class MovieListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ('title', 'tagline', 'category')
+
+
+class ReviewCreateSerializer(serializers.ModelSerializer):
+    """Добавление отзывов"""
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    """Вывод отзывов"""
+
+    class Meta:
+        model = Review
+        fields = ('name', 'text', 'parent')
 
 
 class MovieDetailSerializer(serializers.ModelSerializer):
@@ -20,6 +36,7 @@ class MovieDetailSerializer(serializers.ModelSerializer):
                                              many=True)
     genres = serializers.SlugRelatedField(slug_field='name', read_only=True,
                                              many=True)
+    reviews = ReviewSerializer(many=True)
 
     class Meta:
         model = Movie
